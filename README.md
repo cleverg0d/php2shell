@@ -158,13 +158,15 @@ Local lab (Docker) and coverage demo — everything lives under `lab/`:
 ./lab/coverage.sh down
 ```
 
-Screenshots (official `php:8.4.26-apache`, `php:8.5.11-apache`, and a real installed WordPress 7.1.3 on PHP 8.4.26):
+Screenshots (official `php:8.4.26-apache`, `php:8.5.11-apache`, a real installed WordPress 7.1.3, and the bulk `scan` mode):
 
 ![php:8.4.26-apache RCE](screenshots/php8.4.26-rce.png)
 
 ![php:8.5.11-apache RCE](screenshots/php8.5.11-rce.png)
 
 ![WordPress 7.1.3 RCE](screenshots/wordpress-7.1.3-rce.png)
+
+![scan mode: 10/11 lab targets vulnerable, patched 8.4.27 reported fixed](screenshots/scan-labs-10-of-11.png)
 
 ---
 
