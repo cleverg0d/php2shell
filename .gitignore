@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+lab/php.ini
+lab/apache.conf
+lab/www/
+lab-out/
+lab-php.ini
+lab-apache.conf
+out/
+# downloaded third-party apps (run fetch-cms.sh to populate)
+coverage/www/wordpress/
+coverage/www/joomla/
+coverage/www/mediawiki/
+coverage/www/phpbb/
+coverage/www/drupal/
