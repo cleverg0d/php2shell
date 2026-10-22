@@ -145,17 +145,17 @@ Example output:
 00:06.59  OK  OUTPUT       uid=33(www-data) gid=33(www-data) groups=33(www-data)
 ```
 
-Local lab (Docker) and coverage demo:
+Local lab (Docker) and coverage demo — everything lives under `lab/`:
 
 ```bash
-./lab.sh up 8.4.26     # single-worker prefork + mod_php target
-./lab.sh rce 'id>/out/p1'
+./lab/lab.sh up 8.4.26        # single-worker prefork + mod_php target
+./lab/lab.sh rce 'id>/out/p1'
 
-./fetch-cms.sh         # download real WordPress/Joomla/MediaWiki/phpBB/Drupal
-./coverage.sh up       # one target
-./coverage.sh run      # fire on the plain endpoint (concrete proof)
-./coverage.sh real     # fire on the real CMS checkouts (honest per-app result)
-./coverage.sh down
+./lab/fetch-cms.sh            # download real WordPress/Joomla/MediaWiki/phpBB/Drupal
+./lab/coverage.sh up          # one target
+./lab/coverage.sh run         # fire on the plain endpoint (concrete proof)
+./lab/coverage.sh real        # fire on the real CMS checkouts (honest per-app result)
+./lab/coverage.sh down
 ```
 
 Screenshots (official `php:8.4.26-apache`, `php:8.5.11-apache`, and a real installed WordPress 7.1.3 on PHP 8.4.26):

@@ -10,19 +10,21 @@
 # the plain endpoint below.
 #
 # usage:
-#   ./coverage.sh up|run|down          # plain mod_php endpoint (concrete proof)
-#   ./coverage.sh real                 # fire against real fetched CMS checkouts
+#   ./lab/coverage.sh up|run|down    # plain mod_php endpoint (concrete proof)
+#   ./lab/coverage.sh real           # fire against real fetched CMS checkouts
 set -u
-HERE=$(cd "$(dirname "$0")" && pwd)
-INI=$HERE/lab-php.ini
-CONF=$HERE/lab-apache.conf
-WWW=$HERE/coverage/www
+HERE=$(cd "$(dirname "$0")" && pwd)      # .../php2shell/lab
+ROOT=$(cd "$HERE/.." && pwd)             # .../php2shell
+INI=$HERE/coverage-php.ini
+CONF=$HERE/coverage-apache.conf
+WWW=$HERE/www
 OUT=$HERE/out
 PORT=${PORT:-8099}
 APPS="plain"
 REAL_APPS="wordpress joomla mediawiki phpbb drupal"
 
-mkdir -p "$OUT"; chmod 777 "$OUT"
+mkdir -p "$OUT" "$WWW/plain"; chmod 777 "$OUT"
+printf '<?php echo "OK\\n"; ?>\n' > "$WWW/plain/index.php"
 
 cat > "$INI" <<'INI'
 display_errors = On
@@ -54,7 +56,7 @@ table() {
   printf "%-10s | %-30s | %s\n" "APP" "DETECTED" "RCE OUTPUT"
   printf '%s\n' "---------------------------------------------------------------------"
   for a in $1; do
-    out=$(python3 "$HERE/php2shell.py" rce "http://127.0.0.1:$PORT/$a/index.php" --attempts 2 2>/dev/null)
+    out=$(python3 "$ROOT/php2shell.py" rce "http://127.0.0.1:$PORT/$a/index.php" --attempts 2 2>/dev/null)
     detected=$(echo "$out" | grep -oE "DETECTED  [A-Za-z]+ at" | sed 's/DETECTED  //; s/ at//')
     rce=$(echo "$out" | grep -oE "OUTPUT  .*" | sed 's/OUTPUT  //' | head -1)
     [ -z "$rce" ] && rce="(no output)"
@@ -84,6 +86,6 @@ case "${1:-}" in
     docker rm -f php2shell-cov >/dev/null 2>&1 && echo "coverage lab removed"
     ;;
   *)
-    sed -n '1,16p' "$0"
+    sed -n '1,17p' "$0"
     ;;
 esac

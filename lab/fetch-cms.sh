@@ -3,10 +3,10 @@
 # The exploit chain is app-independent (it fires pre-RINIT), so these are real
 # unmodified app checkouts, not stub files. Drupal is the one exception: its
 # unconfigured index.php fatals, which breaks the two-request leak (see README).
-# usage: ./fetch-cms.sh
+# usage: ./lab/fetch-cms.sh
 set -euo pipefail
-HERE=$(cd "$(dirname "$0")" && pwd)
-WWW=$HERE/coverage/www
+HERE=$(cd "$(dirname "$0")" && pwd)      # .../php2shell/lab
+WWW=$HERE/www
 mkdir -p "$WWW"
 
 fetch() { # name url
